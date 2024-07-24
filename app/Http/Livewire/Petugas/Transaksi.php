@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Livewire\Petugas;
 
 use App\Models\Peminjaman;
@@ -13,6 +12,13 @@ class Transaksi extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $belum_dipinjam, $sedang_dipinjam, $selesai_dipinjam, $search;
+
+    public function create()
+    {
+        // Logika untuk metode create (jika ada)
+        // Jika belum ada logika spesifik, bisa dibiarkan kosong atau tambahkan pesan flash
+        session()->flash('message', 'Metode create dipanggil.');
+    }
 
     public function belumDipinjam()
     {
@@ -36,7 +42,7 @@ class Transaksi extends Component
     {
         foreach ($peminjaman->detail_peminjaman as $detail_peminjaman) {
             $detail_peminjaman->buku->update([
-                'stok' => $detail_peminjaman->buku->stok -1
+                'stok' => $detail_peminjaman->buku->stok - 1
             ]);
         }
 
@@ -68,7 +74,7 @@ class Transaksi extends Component
             $denda *= 1000;
             $data['denda'] = $denda;
         }
-        
+
         $peminjaman->update($data);
         session()->flash('sukses', 'Buku berhasil dikembalikan.');
     }
@@ -96,7 +102,7 @@ class Transaksi extends Component
                 $transaksi = Peminjaman::latest()->where('status', '!=', 0)->paginate(5);
             }
         }
-    
+
         return view('livewire.petugas.transaksi', [
             'transaksi' => $transaksi
         ]);
